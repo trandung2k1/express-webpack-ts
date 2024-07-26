@@ -25,7 +25,20 @@ module.exports = (env, argv) => {
             path: path.resolve(__dirname, 'dist'),
             clean: true,
         },
-        externals: [nodeExternals()],
+        externalsPresets: { node: true }, // In order to ignore built-in modules like path, fs, etc.
+        externals: [{ mongoose: 'commonjs mongoose' }],
+        //Development error
+        // externals: [
+        //     nodeExternals({
+        //         modulesFromFile: {
+        //             fileName: './package.json',
+        //             includeInBundle: [],
+        //             excludeFromBundle: [],
+        //         },
+        //     }),
+        //     // Exclude mongoose explicitly if needed
+        //     'mongoose',
+        // ],
         devtool: isProduction ? false : 'inline-source-map',
         mode: isProduction ? 'production' : 'development',
         watch: isProduction ? false : true,
@@ -35,7 +48,7 @@ module.exports = (env, argv) => {
             new Dotenv(),
         ],
         resolve: {
-            extensions: ['.ts', '.js'], // Resolve both TypeScript and JavaScript files
+            extensions: ['.js', '.jsx', '.ts', '.tsx'],
             fallback: {
                 fs: false,
                 net: false,
