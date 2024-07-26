@@ -5,6 +5,7 @@ const Dotenv = require('dotenv-webpack');
 const CompressionPlugin = require('compression-webpack-plugin');
 const BundleAnalyzerPlugin =
     require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = (env, argv) => {
@@ -68,6 +69,9 @@ module.exports = (env, argv) => {
 
         optimization: isProduction
             ? {
+                  minimize: true,
+                  minimizer: [new TerserPlugin({ parallel: true })],
+                  removeAvailableModules: true,
                   splitChunks: {
                       chunks: 'all',
                   },
